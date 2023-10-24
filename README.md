@@ -1,27 +1,49 @@
-# -project007
-# Algorithm
+# project007
 
-1.Initialize:
-Create a set of visited nodes (initialized as empty).
-Create a set of unvisited nodes (initialized with all nodes).
-Assign a distance value to every node. Initialize it as infinity for all nodes, except the source node, which is set to 0.
-Set the current node as the source node.
+*Dijkstra's Shortest Path Algorithm*
 
-2.For the current node, consider all of its neighbors:
-Calculate their tentative distances from the source node. The distance from the source node to a neighbor is the sum of the distance value of the current node and the weight of the edge connecting them.
-Compare the newly calculated tentative distance to the current assigned value and assign the smaller one.
+Input:
+- `vec`: A 2D vector representing the graph with each row containing (u, v, w) denoting an edge from vertex u to vertex v with weight w.
+- `vertices`: The total number of vertices in the graph.
+- `edges`: The total number of edges in the graph.
+- `source`: The source vertex from which the shortest paths are calculated.
 
-3.After considering all of the neighbors of the current node, mark the current node as visited:
-A visited node will not be checked again.
+Output:
+- `dist`: A vector of integers representing the shortest distance from the source vertex to every other vertex.
 
-4.Select the unvisited node with the smallest tentative distance:
-Set it as the new "current node" for the next iteration.
+Algorithm:
 
-5.Repeat steps 2-4 until the destination node is marked as visited or until there are no unvisited nodes left.
+1. Create an empty adjacency list `adj` to represent the graph.
 
-6.Backtrack to find the shortest path:
-Once the destination node is marked as visited, the algorithm can be stopped. The shortest path can be obtained by backtracking from the destination node to the source node using the information stored in each node's "previous" field.
+2. Populate the adjacency list `adj` with edges and their corresponding weights:
+   - For each edge (u, v, w) in `vec`:
+     - Add (v, w) to `adj[u]` (since it's an undirected graph, add (u, w) to `adj[v]` as well).
+
+3. Initialize a vector `dist` of size `vertices` with all elements set to `INT_MAX`, representing initial distances.
+
+4. Create an empty set `st` to store pairs (distance, vertex).
+
+5. Set the distance of the `source` vertex to 0 and insert (0, `source`) into `st`.
+
+6. While `st` is not empty:
+   - Get the top element `(node_distance, top_node)` from `st`.
+   - Remove the top element from `st`.
+   - For each neighbor of `top_node` in `adj`:
+     - Calculate the new distance `node_distance + neighbor.weight`.
+     - If the new distance is less than the current distance in `dist` for the neighbor:
+       - Find and erase the existing record of the neighbor from `st` if it exists.
+       - Update `dist[neighbor]` with the new distance.
+       - Insert `(new_distance, neighbor)` into `st`.
+
+7. Return the vector `dist` containing the shortest distances.
+
+Time Complexity:
+- The time complexity of Dijkstra's algorithm with a binary heap is O((V + E) log V), where V is the number of vertices and E is the number of edges in the graph.
+
+This algorithm efficiently finds the shortest path between a given source vertex and all other vertices in a weighted, undirected graph using Dijkstra's shortest path algorithm.
+
 # Code
+
 #include <bits/stdc++.h> 
 using namespace std;
 vector<int> dijkstra(vector<vector<int>> &vec, int vertices, int edges, int source) {
@@ -95,3 +117,5 @@ int main() {
     
     return 0;
 }
+
+# Output:
